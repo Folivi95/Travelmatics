@@ -3,8 +3,15 @@ package com.example.travelmantics;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -26,37 +33,30 @@ public class ListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        FirebaseUtil.openFbReference("traveldeals");
-        _firebaseDatabase = FirebaseUtil._firebaseDatabase;
-        _databaseReference = FirebaseUtil._databaseReference;
-        _childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //TextView tvDeals = findViewById(R.id.tvDeals);
-                TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
-                //tvDeals.setText(tvDeals.getText() + "\n" + td.getTitle());
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        RecyclerView rvDeals = findViewById(R.id.rvDeals);
+        final DealAdapter dealAdapter = new DealAdapter();
+        rvDeals.setAdapter(dealAdapter);
+        @SuppressLint("WrongConstant")
+        LinearLayoutManager dealsLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rvDeals.setLayoutManager(dealsLayoutManager);
+    }
 
-            }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_activity_menu, menu);
+        return true;
+    }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        _databaseReference.addChildEventListener(_childEventListener);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.insert_menu:
+                Intent intent = new Intent(this, DealActivity.class);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
