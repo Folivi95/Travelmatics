@@ -19,6 +19,7 @@ public class DealActivity extends AppCompatActivity {
     //fields declaration
     private FirebaseDatabase _firebaseDatabase;
     private DatabaseReference _databaseReference;
+    private ListActivity listActivity;
     EditText txtTitle;
     EditText txtDescription;
     EditText txtPrice;
@@ -28,7 +29,7 @@ public class DealActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert);
-        FirebaseUtil.openFbReference("traveldeals");
+        FirebaseUtil.openFbReference("traveldeals", listActivity);
         _firebaseDatabase = FirebaseUtil._firebaseDatabase;
         _databaseReference = FirebaseUtil._databaseReference;
         txtTitle = findViewById(R.id.txtTitle);
@@ -66,6 +67,22 @@ public class DealActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.save_menu, menu);
+        if(FirebaseUtil.isAdmin == true){
+            menu.findItem(R.id.delete_menu).setVisible(true);
+            menu.findItem(R.id.save_menu).setVisible(true);
+            enableEditTexts(true);
+        }else {
+            menu.findItem(R.id.delete_menu).setVisible(false);
+            menu.findItem(R.id.save_menu).setVisible(false);
+            enableEditTexts(false);
+        }
+        return true;
+    }
+
     private void saveDeal() {
         deal.setTitle(txtTitle.getText().toString());
         deal.setDescription(txtDescription.getText().toString());
@@ -99,10 +116,9 @@ public class DealActivity extends AppCompatActivity {
         txtTitle.requestFocus();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.save_menu, menu);
-        return true;
+    private void enableEditTexts(boolean isEnabled){
+        txtTitle.setEnabled(isEnabled);
+        txtPrice.setEnabled(isEnabled);
+        txtDescription.setEnabled(isEnabled);
     }
 }

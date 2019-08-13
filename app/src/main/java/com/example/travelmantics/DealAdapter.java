@@ -25,11 +25,12 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
     private static FirebaseDatabase _firebaseDatabase;
     private static DatabaseReference _databaseReference;
     private static ChildEventListener _childEventListener;
+    private static ListActivity listActivity;
     private static FirebaseUtil _firebaseUtil;
     private static ArrayList<TravelDeal> _deals;
 
     public DealAdapter(){
-        FirebaseUtil.openFbReference("traveldeals");
+        FirebaseUtil.openFbReference("traveldeals", listActivity);
         _firebaseDatabase = FirebaseUtil._firebaseDatabase;
         _databaseReference = FirebaseUtil._databaseReference;
         _deals = FirebaseUtil._deals;
