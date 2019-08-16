@@ -39,7 +39,6 @@ public class DealActivity extends AppCompatActivity {
     ImageView imageView;
     TravelDeal deal;
     private static final int PICTURE_RESULT = 42;
-    Button btnImage = findViewById(R.id.btnImage);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +62,7 @@ public class DealActivity extends AppCompatActivity {
         txtDescription.setText(deal.getDescription());
         txtPrice.setText(deal.getPrice());
         showImage(deal.getImageUrl());
+        Button btnImage = findViewById(R.id.btnImage);
         btnImage.setOnClickListener(v -> {
             Intent intent1 = new Intent(Intent.ACTION_GET_CONTENT);
             intent1.setType("image/jpeg");
@@ -100,10 +100,12 @@ public class DealActivity extends AppCompatActivity {
             menu.findItem(R.id.delete_menu).setVisible(true);
             menu.findItem(R.id.save_menu).setVisible(true);
             enableEditTexts(true);
+            findViewById(R.id.btnImage).setEnabled(true);
         }else {
             menu.findItem(R.id.delete_menu).setVisible(false);
             menu.findItem(R.id.save_menu).setVisible(false);
             enableEditTexts(false);
+            findViewById(R.id.btnImage).setEnabled(false);
         }
         return true;
     }
@@ -176,7 +178,6 @@ public class DealActivity extends AppCompatActivity {
         txtTitle.setEnabled(isEnabled);
         txtPrice.setEnabled(isEnabled);
         txtDescription.setEnabled(isEnabled);
-        btnImage.setEnabled(isEnabled);
     }
 
     private void showImage(String url){
